@@ -1,0 +1,348 @@
+// Import express, cors, and sqlite3
+const express = require('express');
+const cors = require('cors');
+const sqlite3 = require('sqlite3').verbose();
+
+// Set up Express server on port 5001 (5000 is occupied by ControlCenter)
+const app = express();
+const port = 5001;
+
+// Enable CORS for frontend access
+app.use(cors());
+app.use(express.json());
+
+// Create a SQLite database 'leaderboard.db'
+const db = new sqlite3.Database('./leaderboard.db', (err) => {
+  if (err) {
+    console.error('Error opening database:', err.message);
+  } else {
+    console.log('Connected to SQLite database');
+  }
+});
+
+// Create tables: users, submissions, and entries (legacy leaderboard)
+db.serialize(() => {
+  // Users table
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    quota_limit INTEGER DEFAULT 10,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`, (err) => {
+    if (err) {
+      console.error('Error creating users table:', err.message);
+    } else {
+      console.log('Users table created or already exists');
+    }
+  });
+
+  // Submissions table
+  db.run(`CREATE TABLE IF NOT EXISTS submissions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    score REAL NOT NULL,
+    driving_score REAL,
+    route_completion REAL,
+    infraction_penalty REAL,
+    file_hash TEXT,
+    submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status TEXT DEFAULT 'pending',
+    FOREIGN KEY (user_id) REFERENCES users (id)
+  )`, (err) => {
+    if (err) {
+      console.error('Error creating submissions table:', err.message);
+    } else {
+      console.log('Submissions table created or already exists');
+    }
+  });
+
+  // Legacy entries table for backward compatibility
+  db.run(`CREATE TABLE IF NOT EXISTS entries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    rank INTEGER,
+    entry TEXT,
+    score REAL,
+    driving_score REAL,
+    route_completion REAL,
+    infraction_penalty REAL,
+    submissions INTEGER
+  )`, (err) => {
+    if (err) {
+      console.error('Error creating entries table:', err.message);
+    } else {
+      console.log('Entries table created or already exists');
+    }
+  });
+
+  // Insert sample users if table is empty
+  db.get('SELECT COUNT(*) as count FROM users', (err, row) => {
+    if (err) {
+      console.error('Error checking users:', err.message);
+    } else if (row.count === 0) {
+      console.log('Inserting sample users...');
+      
+      const userStmt = db.prepare('INSERT INTO users (username, email, quota_limit) VALUES (?, ?, ?)');
+      
+      const sampleUsers = [
+        ['autonomous_ai', 'team@autonomousai.com', 15],
+        ['deepdrive', 'labs@deepdrive.com', 12],
+        ['neural_nav', 'contact@neuralnav.com', 18],
+        ['robovision', 'info@robovision.com', 9],
+        ['smartcar', 'team@smartcar.ai', 21],
+      ];
+
+      sampleUsers.forEach(user => {
+        userStmt.run(user, (err) => {
+          if (err) {
+            console.error('Error inserting user:', err.message);
+          }
+        });
+      });
+
+      userStmt.finalize(() => {
+        console.log('Sample users inserted successfully');
+      });
+    }
+  });
+
+  // Check if we need to insert sample data for entries table
+  db.get('SELECT COUNT(*) as count FROM entries', (err, row) => {
+    if (err) {
+      console.error('Error checking entries:', err.message);
+    } else if (row.count === 0) {
+      // Insert sample data (e.g., 10 fake entries mimicking CARLA scores)
+      console.log('Inserting sample entries...');
+      
+      const stmt = db.prepare('INSERT INTO entries (rank, entry, score, driving_score, route_completion, infraction_penalty, submissions) VALUES (?, ?, ?, ?, ?, ?, ?)');
+      
+      const sampleData = [
+        [1, 'AutonomousAI Team', 95.5, 98.2, 99.1, 0.95, 15],
+        [2, 'DeepDrive Labs', 93.8, 96.5, 97.8, 1.02, 12],
+        [3, 'Neural Navigator', 92.3, 95.1, 96.5, 1.15, 18],
+        [4, 'RoboVision Inc', 90.7, 94.3, 95.2, 1.28, 9],
+        [5, 'SmartCar AI', 89.4, 92.8, 94.1, 1.35, 21],
+        [6, 'AutoPilot Pro', 87.9, 91.5, 92.8, 1.42, 14],
+        [7, 'Velocity Systems', 86.2, 90.1, 91.3, 1.55, 11],
+        [8, 'PathFinder AI', 84.5, 88.7, 89.9, 1.68, 16],
+        [9, 'DriveNet Research', 82.8, 87.2, 88.4, 1.79, 13],
+        [10, 'CogniDrive', 81.1, 85.8, 86.7, 1.92, 10],
+        [11, 'Perception Labs', 79.3, 84.1, 85.2, 2.08, 8],
+        [12, 'MotionAI', 77.6, 82.5, 83.6, 2.21, 19],
+      ];
+
+      sampleData.forEach(data => {
+        stmt.run(data, (err) => {
+          if (err) {
+            console.error('Error inserting data:', err.message);
+          }
+        });
+      });
+
+      stmt.finalize(() => {
+        console.log('Sample entries inserted successfully');
+        // Start the server after database is initialized
+        startServer();
+      });
+    } else {
+      console.log(`Database already has ${row.count} entries`);
+      // Start the server after database is initialized
+      startServer();
+    }
+  });
+});
+
+// Function to start the server after database initialization
+function startServer() {
+  // Create GET endpoint /api/leaderboard to fetch all entries sorted by score DESC
+  app.get('/api/leaderboard', (req, res) => {
+    db.all('SELECT * FROM entries ORDER BY score DESC', [], (err, rows) => {
+      if (err) {
+        console.error('Error fetching leaderboard:', err.message);
+        return res.status(500).json({ error: 'Failed to fetch leaderboard data' });
+      }
+      res.json(rows);
+    });
+  });
+
+  // Add POST /api/submit to insert new entry and update ranks
+  app.post('/api/submit', (req, res) => {
+    const { entry, score, driving_score, route_completion, infraction_penalty } = req.body;
+
+    if (!entry || score === undefined || driving_score === undefined) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Insert new entry (rank will be calculated based on score)
+    db.run(
+      'INSERT INTO entries (entry, score, driving_score, route_completion, infraction_penalty, submissions) VALUES (?, ?, ?, ?, ?, 1)',
+      [entry, score, driving_score, route_completion || 0, infraction_penalty || 0],
+      function(err) {
+        if (err) {
+          console.error('Error inserting entry:', err.message);
+          return res.status(500).json({ error: 'Failed to submit entry' });
+        }
+
+        // Update ranks for all entries
+        db.run(`
+          UPDATE entries
+          SET rank = (
+            SELECT COUNT(*) + 1
+            FROM entries e2
+            WHERE e2.score > entries.score
+          )
+        `, (err) => {
+          if (err) {
+            console.error('Error updating ranks:', err.message);
+          }
+        });
+
+        res.json({ 
+          message: 'Entry submitted successfully', 
+          id: this.lastID 
+        });
+      }
+    );
+  });
+
+  // User management endpoints
+  app.post('/api/users/register', (req, res) => {
+    const { username, email, quota_limit } = req.body;
+
+    if (!username || !email) {
+      return res.status(400).json({ error: 'Username and email are required' });
+    }
+
+    db.run(
+      'INSERT INTO users (username, email, quota_limit) VALUES (?, ?, ?)',
+      [username, email, quota_limit || 10],
+      function(err) {
+        if (err) {
+          if (err.message.includes('UNIQUE constraint failed')) {
+            return res.status(409).json({ error: 'Username or email already exists' });
+          }
+          console.error('Error creating user:', err.message);
+          return res.status(500).json({ error: 'Failed to create user' });
+        }
+
+        res.json({ 
+          message: 'User created successfully', 
+          user_id: this.lastID 
+        });
+      }
+    );
+  });
+
+  app.get('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+
+    db.get('SELECT id, username, email, quota_limit, created_at FROM users WHERE id = ?', [userId], (err, row) => {
+      if (err) {
+        console.error('Error fetching user:', err.message);
+        return res.status(500).json({ error: 'Failed to fetch user' });
+      }
+
+      if (!row) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.json(row);
+    });
+  });
+
+  app.get('/api/users/:id/submissions', (req, res) => {
+    const userId = req.params.id;
+
+    db.all(
+      'SELECT * FROM submissions WHERE user_id = ? ORDER BY submitted_at DESC',
+      [userId],
+      (err, rows) => {
+        if (err) {
+          console.error('Error fetching user submissions:', err.message);
+          return res.status(500).json({ error: 'Failed to fetch submissions' });
+        }
+
+        res.json(rows);
+      }
+    );
+  });
+
+  // Submission management endpoints
+  app.post('/api/submissions', (req, res) => {
+    const { user_id, score, driving_score, route_completion, infraction_penalty, file_hash } = req.body;
+
+    if (!user_id || score === undefined) {
+      return res.status(400).json({ error: 'User ID and score are required' });
+    }
+
+    // Check user's submission quota
+    db.get('SELECT quota_limit, (SELECT COUNT(*) FROM submissions WHERE user_id = ? AND DATE(submitted_at) = DATE("now")) as today_submissions FROM users WHERE id = ?', [user_id, user_id], (err, row) => {
+      if (err) {
+        console.error('Error checking quota:', err.message);
+        return res.status(500).json({ error: 'Failed to check submission quota' });
+      }
+
+      if (!row) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      if (row.today_submissions >= row.quota_limit) {
+        return res.status(429).json({ error: 'Daily submission limit exceeded' });
+      }
+
+      // Insert submission
+      db.run(
+        'INSERT INTO submissions (user_id, score, driving_score, route_completion, infraction_penalty, file_hash) VALUES (?, ?, ?, ?, ?, ?)',
+        [user_id, score, driving_score || 0, route_completion || 0, infraction_penalty || 0, file_hash],
+        function(err) {
+          if (err) {
+            console.error('Error creating submission:', err.message);
+            return res.status(500).json({ error: 'Failed to create submission' });
+          }
+
+          res.json({ 
+            message: 'Submission created successfully', 
+            submission_id: this.lastID 
+          });
+        }
+      }
+    });
+  });
+
+  app.get('/api/submissions/:id', (req, res) => {
+    const submissionId = req.params.id;
+
+    db.get('SELECT * FROM submissions WHERE id = ?', [submissionId], (err, row) => {
+      if (err) {
+        console.error('Error fetching submission:', err.message);
+        return res.status(500).json({ error: 'Failed to fetch submission' });
+      }
+
+      if (!row) {
+        return res.status(404).json({ error: 'Submission not found' });
+      }
+
+      res.json(row);
+    });
+  });
+
+  // Health check endpoint
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', message: 'Backend is running' });
+  });
+
+  // Start the server
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+    console.log(`API endpoints available:`);
+    console.log(`  - GET  http://localhost:${port}/api/leaderboard`);
+    console.log(`  - POST http://localhost:${port}/api/submit`);
+    console.log(`  - POST http://localhost:${port}/api/users/register`);
+    console.log(`  - GET  http://localhost:${port}/api/users/:id`);
+    console.log(`  - GET  http://localhost:${port}/api/users/:id/submissions`);
+    console.log(`  - POST http://localhost:${port}/api/submissions`);
+    console.log(`  - GET  http://localhost:${port}/api/submissions/:id`);
+    console.log(`  - GET  http://localhost:${port}/api/health`);
+  });
+}
