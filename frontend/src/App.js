@@ -1,6 +1,6 @@
 // Import necessary libraries: React Router for navigation
 import React, { useState, useRef, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import Home from './Home';
 import Leaderboard from './Leaderboard';
 import GetStarted from './GetStarted';
@@ -28,20 +28,13 @@ function AuthRoute({ user, children }) {
   return children;
 }
 
-// Navigation bar component
+// Navbar component
 function Navbar({ onEditProfile, currentUser, onUserUpdate }) {
-  const location = useLocation();
+  const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const { pathname } = useLocation();
 
-  // Use currentUser prop instead of localStorage directly
-  const user = currentUser;
-
-  const isActive = (path) => {
-    return location.pathname === path ? 'active' : '';
-  };
-
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -60,12 +53,14 @@ function Navbar({ onEditProfile, currentUser, onUserUpdate }) {
     localStorage.removeItem('token');
     setShowDropdown(false);
     onUserUpdate(null);
-    window.location.href = '/login';
+    navigate('/login');
   };
 
-  const getUserInitials = (username) => {
-    return username ? username.charAt(0).toUpperCase() : 'U';
+  const isActive = (path) => {
+    return pathname === path ? 'active' : '';
   };
+
+  const user = currentUser;
 
   return (
     <nav className="navbar">
@@ -88,12 +83,12 @@ function Navbar({ onEditProfile, currentUser, onUserUpdate }) {
                 className="user-avatar"
                 onClick={() => setShowDropdown(!showDropdown)}
               >
-                {getUserInitials(user.username)}
+                {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
               </div>
               {showDropdown && (
                 <div className="user-dropdown">
                   <div className="user-info">
-                    <div className="user-avatar-dropdown">{getUserInitials(user.username)}</div>
+                    <div className="user-avatar-dropdown">{user.username ? user.username.charAt(0).toUpperCase() : 'U'}</div>
                     <div className="user-details">
                       <div className="username">{user.username}</div>
                       <div className="email">{user.email}</div>
@@ -135,6 +130,31 @@ function App() {
   const handleUserUpdate = (updatedUser) => {
     setCurrentUser(updatedUser);
   };
+
+  // Listen for localStorage changes (for login/logout)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedUser = localStorage.getItem('user');
+      setCurrentUser(storedUser ? JSON.parse(storedUser) : null);
+    };
+
+    // Listen for storage events (when localStorage is changed in another tab)
+    window.addEventListener('storage', handleStorageChange);
+
+    // Also check periodically for changes (in case of same tab changes)
+    const interval = setInterval(() => {
+      const storedUser = localStorage.getItem('user');
+      const currentStored = storedUser ? JSON.parse(storedUser) : null;
+      if (JSON.stringify(currentStored) !== JSON.stringify(currentUser)) {
+        setCurrentUser(currentStored);
+      }
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [currentUser]);
 
   return (
     <Router>

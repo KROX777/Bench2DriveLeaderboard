@@ -1,5 +1,5 @@
 // Register page component
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './Pages.css';
@@ -14,6 +14,14 @@ function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      navigate('/profile');
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({

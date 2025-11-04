@@ -569,9 +569,28 @@
   }
 }
 
-/* Profile Page */
-.profile-header {
+/* Leaderboard Page */
+.header-section {
   margin-bottom: 3rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #1a2332;
+}
+
+.header-section p {
+  color: #666;
+  font-size: 1.1rem;
 }
 
 .profile-header-content {

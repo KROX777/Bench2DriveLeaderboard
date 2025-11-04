@@ -114,7 +114,7 @@ python leaderboard/scripts/submit.py \\
             </a>
           </li>
           <li>
-            <a href="https://github.com/Thinklab-SJTU/Bench2Drive/blob/main/docs/README.md" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/Thinklab-SJTU/Bench2Drive/blob/main/README.md" target="_blank" rel="noopener noreferrer">
               💻 Documentation
             </a>
           </li>

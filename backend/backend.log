@@ -1,0 +1,23 @@
+Server running on http://localhost:5001
+API endpoints available:
+  - GET  http://localhost:5001/api/leaderboard
+  - POST http://localhost:5001/api/submit
+  - POST http://localhost:5001/api/auth/register
+  - POST http://localhost:5001/api/auth/login
+  - GET  http://localhost:5001/api/users/:id
+  - PUT  http://localhost:5001/api/users/:id
+  - GET  http://localhost:5001/api/users/:id/submissions
+  - POST http://localhost:5001/api/submissions
+  - GET  http://localhost:5001/api/submissions/:id
+  - GET  http://localhost:5001/api/health
+Connected to SQLite database
+Users table created
+Submissions table created
+Entries table created
+Inserting sample users...
+Sample users inserted
+Error inserting user: SQLITE_CONSTRAINT: NOT NULL constraint failed: users.password
+Error inserting user: SQLITE_CONSTRAINT: NOT NULL constraint failed: users.password
+Error inserting user: SQLITE_CONSTRAINT: NOT NULL constraint failed: users.password
+Error inserting user: SQLITE_CONSTRAINT: NOT NULL constraint failed: users.password
+Error inserting user: SQLITE_CONSTRAINT: NOT NULL constraint failed: users.password

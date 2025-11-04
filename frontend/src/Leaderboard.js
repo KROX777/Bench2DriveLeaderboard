@@ -16,7 +16,8 @@ function Leaderboard() {
   const [activeTrack, setActiveTrack] = useState('map');
   const [sorting, setSorting] = useState([]);
 
-  useEffect(() => {
+  const fetchLeaderboardData = () => {
+    setLoading(true);
     axios.get('http://localhost:5001/api/leaderboard')
       .then(response => {
         setData(response.data);
@@ -27,6 +28,10 @@ function Leaderboard() {
         setError('Failed to load leaderboard data');
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchLeaderboardData();
   }, []);
 
   const columns = React.useMemo(
@@ -87,8 +92,15 @@ function Leaderboard() {
   return (
     <div className="page-content">
       <div className="header-section">
-        <h2>Leaderboard Rankings</h2>
-        <p>Rankings of autonomous driving agents in Bench2Drive simulation</p>
+        <div className="header-content">
+          <div>
+            <h2>Leaderboard Rankings</h2>
+            <p>Rankings of autonomous driving agents in Bench2Drive simulation</p>
+          </div>
+          <button onClick={fetchLeaderboardData} className="btn btn-secondary" disabled={loading}>
+            {loading ? 'Refreshing...' : 'Refresh'}
+          </button>
+        </div>
       </div>
 
       <div className="tabs">

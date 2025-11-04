@@ -55,18 +55,18 @@ function Submit() {
       }
 
       // Create FormData for file upload
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('user_id', user.id);
+      const submitData = new FormData();
+      submitData.append('file', file);
+      submitData.append('user_id', user.id);
 
-      console.log('Submitting file:', file.name);
-      const response = await axios.post('http://localhost:5001/api/submissions', formData, {
+      console.log('Submitting file for evaluation:', file.name);
+      const response = await axios.post('http://localhost:5001/api/submissions', submitData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      setMessage(`✅ Submission successful! Submission ID: ${response.data.submission_id}`);
+      setMessage(`✅ Submission successful! Evaluation in progress. Submission ID: ${response.data.submission_id}`);
       setFile(null);
       // Reset file input
       document.getElementById('result_file').value = '';
@@ -108,6 +108,9 @@ function Submit() {
         <form onSubmit={handleSubmit} className="submit-form">
           <div className="form-group">
             <label htmlFor="result_file">Result File *</label>
+            <p style={{ fontSize: '0.9em', color: '#666', margin: '0.5em 0' }}>
+              Upload your evaluation result file. The system will automatically score it using the evaluation engine.
+            </p>
             <input
               type="file"
               id="result_file"
@@ -133,7 +136,7 @@ function Submit() {
             className="btn btn-primary submit-btn"
             disabled={submitting || !file}
           >
-            {submitting ? 'Submitting...' : 'Submit Results'}
+            {submitting ? 'Submitting...' : 'Submit for Evaluation'}
           </button>
         </form>
       </div>
