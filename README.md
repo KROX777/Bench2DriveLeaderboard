@@ -1,4 +1,4 @@
-# Bench2Drive-Style Leaderboard Website
+# Bench2Drive Leaderboard Website
 
 A full-stack web application replicating the Bench2Drive Autonomous Driving Leaderboard, featuring a React frontend with sortable tables and a Node.js/Express backend with SQLite database.
 
@@ -28,19 +28,57 @@ A full-stack web application replicating the Bench2Drive Autonomous Driving Lead
 ## 📁 Project Structure
 
 ```
-b2d/
-├── frontend/               # React application
-│   ├── public/
-│   ├── src/
-│   │   ├── App.js         # Main React component with leaderboard
-│   │   ├── App.css        # Styling for the application
-│   │   └── index.js       # React entry point
-│   └── package.json
-│
-└── backend/               # Node.js/Express API
-    ├── index.js          # Express server with SQLite
-    ├── package.json
-    └── leaderboard.db    # SQLite database (auto-generated)
+/ (repository root)
+├─ README.md
+├─ USER_AUTH_README.md
+├─ start.sh
+├─ backend/
+│  ├─ index.js
+│  ├─ index.js.backup
+│  ├─ package.json
+│  ├─ package-lock.json
+│  ├─ leaderboard.db
+│  └─ README.md
+├─ frontend/
+│  ├─ package.json
+│  ├─ package-lock.json
+│  ├─ .gitignore
+│  ├─ README.md
+│  ├─ public/
+│  │  ├─ index.html
+│  │  ├─ manifest.json
+│  │  ├─ robots.txt
+│  │  ├─ favicon.ico
+│  │  ├─ logo192.png
+│  │  ├─ logo512.png
+│  │  ├─ thinklab.png
+│  │  └─ overview.png
+│  └─ src/
+│     ├─ App.js
+│     ├─ App.css
+│     ├─ App.test.js
+│     ├─ EditProfileModal.js
+│     ├─ GetStarted.js
+│     ├─ Home.js
+│     ├─ Leaderboard.js
+│     ├─ Login.js
+│     ├─ News.js
+│     ├─ Profile.js
+│     ├─ Register.js
+│     ├─ Submit.js
+│     ├─ reportWebVitals.js
+│     ├─ setupTests.js
+│     ├─ index.js
+│     ├─ index.css
+│     ├─ Pages.css
+│     └─ logo.svg
+└─ pictures/
+   ├─ overview.png
+   └─ thinklab.png
+
+Notes:
+- The backend is a Node.js/Express API using SQLite (see `backend/index.js`).
+- The frontend is a Create React App project located in `frontend/`.
 ```
 
 ## 🛠️ Prerequisites
@@ -364,24 +402,3 @@ If you encounter database errors, delete `backend/leaderboard.db` and restart th
 - [SQLite Tutorial](https://www.sqlitetutorial.net/)
 - [TanStack Table Docs](https://tanstack.com/table/latest)
 - [Bench2Drive Simulator](https://bench2drive.org/)
-
-## 💡 Tips for GitHub Copilot Users
-
-This project was designed to be built with GitHub Copilot assistance. When extending the application:
-
-1. Write clear comments describing what you want
-2. Let Copilot suggest implementations
-3. Review and test suggestions before accepting
-4. Break complex features into smaller functions
-5. Use descriptive variable names for better suggestions
-
-Example Copilot-friendly comment:
-```javascript
-// Create a function that filters leaderboard entries by minimum score
-// Parameters: entries array, minScore number
-// Returns: filtered array sorted by score descending
-```
-
----
-
-**Built with ❤️ using React, Node.js, and GitHub Copilot**
