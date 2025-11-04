@@ -8,6 +8,7 @@ function Submit() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [file, setFile] = useState(null);
+  const [track, setTrack] = useState('map');
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState('');
   const [submitCount, setSubmitCount] = useState(0);
@@ -58,8 +59,9 @@ function Submit() {
       const submitData = new FormData();
       submitData.append('file', file);
       submitData.append('user_id', user.id);
+      submitData.append('track', track);
 
-      console.log('Submitting file for evaluation:', file.name);
+      console.log('Submitting file for evaluation:', file.name, 'Track:', track);
       const response = await axios.post('http://localhost:5001/api/submissions', submitData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -106,6 +108,19 @@ function Submit() {
 
       <div className="submit-form-container">
         <form onSubmit={handleSubmit} className="submit-form">
+          <div className="form-group">
+            <label htmlFor="track">Track Selection *</label>
+            <select
+              id="track"
+              value={track}
+              onChange={(e) => setTrack(e.target.value)}
+              required
+            >
+              <option value="map">Map Track</option>
+              <option value="sensor">Sensor Track</option>
+            </select>
+          </div>
+
           <div className="form-group">
             <label htmlFor="result_file">Result File *</label>
             <p style={{ fontSize: '0.9em', color: '#666', margin: '0.5em 0' }}>

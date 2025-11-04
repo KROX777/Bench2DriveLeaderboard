@@ -751,6 +751,21 @@
   border-color: #61dafb;
 }
 
+.form-group select {
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  background-color: white;
+  cursor: pointer;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #61dafb;
+}
+
 .file-info {
   margin-top: 0.5rem;
 }

@@ -92,10 +92,11 @@ db.serialize(() => {
     }
   });
 
-  // Submissions table
+  // Submissions table (with track support)
   db.run(`CREATE TABLE IF NOT EXISTS submissions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
+    track TEXT DEFAULT 'map',
     score REAL NOT NULL,
     driving_score REAL,
     route_completion REAL,
@@ -111,11 +112,12 @@ db.serialize(() => {
     }
   });
 
-  // Legacy entries table
+  // Legacy entries table (with track support)
   db.run(`CREATE TABLE IF NOT EXISTS entries (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     rank INTEGER,
     entry TEXT,
+    track TEXT DEFAULT 'map',
     score REAL,
     driving_score REAL,
     route_completion REAL,
@@ -167,7 +169,8 @@ db.serialize(() => {
 function startServer() {
   // API endpoints
   app.get('/api/leaderboard', (req, res) => {
-    db.all('SELECT * FROM entries ORDER BY score DESC', [], (err, rows) => {
+    const track = req.query.track || 'map';
+    db.all('SELECT * FROM entries WHERE track = ? ORDER BY score DESC', [track], (err, rows) => {
       if (err) {
         console.error('Error fetching leaderboard:', err.message);
         return res.status(500).json({ error: 'Failed to fetch leaderboard data' });
@@ -472,6 +475,7 @@ app.post('/api/submissions', upload.single('file'), (req, res) => {
   const file = req.file;
   const body = req.body || {};
   const user_id = body.user_id;
+  const track = body.track || 'map';
 
   if (!user_id) {
     return res.status(400).json({ error: 'User ID is required' });
@@ -517,10 +521,10 @@ app.post('/api/submissions', upload.single('file'), (req, res) => {
     if (row.today_submissions >= row.quota_limit) {
       return res.status(429).json({ error: 'Daily submission limit exceeded' });
     }
-    // Insert submission with evaluated scores
+    // Insert submission with evaluated scores and track
     db.run(
-      'INSERT INTO submissions (user_id, score, driving_score, route_completion, infraction_penalty, file_hash) VALUES (?, ?, ?, ?, ?, ?)',
-      [user_id, score, driving_score || 0, route_completion || 0, infraction_penalty || 0, file_hash],
+      'INSERT INTO submissions (user_id, track, score, driving_score, route_completion, infraction_penalty, file_hash) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [user_id, track, score, driving_score || 0, route_completion || 0, infraction_penalty || 0, file_hash],
       function(err) {
         if (err) {
           console.error('Error creating submission:', err.message);
@@ -540,8 +544,8 @@ app.post('/api/submissions', upload.single('file'), (req, res) => {
 
           // Also insert into entries table for leaderboard
           db.run(
-            'INSERT INTO entries (entry, score, driving_score, route_completion, infraction_penalty, submissions) VALUES (?, ?, ?, ?, ?, 1)',
-            [entry_name, score, driving_score || 0, route_completion || 0, infraction_penalty || 0],
+            'INSERT INTO entries (entry, track, score, driving_score, route_completion, infraction_penalty, submissions) VALUES (?, ?, ?, ?, ?, ?, 1)',
+            [entry_name, track, score, driving_score || 0, route_completion || 0, infraction_penalty || 0],
             function(err) {
               if (err) {
                 console.error('Error adding to leaderboard:', err.message);

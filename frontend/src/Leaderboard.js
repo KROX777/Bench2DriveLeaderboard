@@ -16,9 +16,23 @@ function Leaderboard() {
   const [activeTrack, setActiveTrack] = useState('map');
   const [sorting, setSorting] = useState([]);
 
+  useEffect(() => {
+    setLoading(true);
+    axios.get(`http://localhost:5001/api/leaderboard?track=${activeTrack}`)
+      .then(response => {
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching leaderboard data:', error);
+        setError('Failed to load leaderboard data');
+        setLoading(false);
+      });
+  }, [activeTrack]);
+
   const fetchLeaderboardData = () => {
     setLoading(true);
-    axios.get('http://localhost:5001/api/leaderboard')
+    axios.get(`http://localhost:5001/api/leaderboard?track=${activeTrack}`)
       .then(response => {
         setData(response.data);
         setLoading(false);
@@ -29,10 +43,6 @@ function Leaderboard() {
         setLoading(false);
       });
   };
-
-  useEffect(() => {
-    fetchLeaderboardData();
-  }, []);
 
   const columns = React.useMemo(
     () => [
