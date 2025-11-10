@@ -1,6 +1,6 @@
-// News page component
-import React from 'react';
-import './Pages.css';
+// News page component
+import React from 'react';
+import './AutodeskStyles.css';
 
 function News() {
   const newsItems = [

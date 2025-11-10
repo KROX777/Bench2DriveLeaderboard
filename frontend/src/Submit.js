@@ -1,8 +1,8 @@
-// Submit page component
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './Pages.css';
+// Submit page component
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './AutodeskStyles.css';
 
 function Submit() {
   const navigate = useNavigate();

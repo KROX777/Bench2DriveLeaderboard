@@ -1,8 +1,8 @@
-// Profile page component
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './Pages.css';
+// Profile page component
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './AutodeskStyles.css';
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -11,15 +11,15 @@ function Profile() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check if user is logged in
-    const storedUser = localStorage.getItem('user');
-    if (!storedUser) {
-      navigate('/login');
-      return;
-    }
-    fetchUserData();
-  }, []); // Remove fetchUserData from dependencies since it's defined inside the component
+  useEffect(() => {
+    // Check if user is logged in
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+      navigate('/login');
+      return;
+    }
+    fetchUserData();
+  }, [navigate]); // Add navigate to dependencies
 
   const fetchUserData = async () => {
     try {

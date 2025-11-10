@@ -1,8 +1,8 @@
-// Register page component
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
-import './Pages.css';
+// Register page component
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import './AutodeskStyles.css';
 
 function Register() {
   const [formData, setFormData] = useState({

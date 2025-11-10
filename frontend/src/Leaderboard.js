@@ -1,13 +1,13 @@
-// Leaderboard page component
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  flexRender,
-} from '@tanstack/react-table';
-import './Pages.css';
+// Leaderboard page component
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  flexRender,
+} from '@tanstack/react-table';
+import './AutodeskStyles.css';
 
 function Leaderboard() {
   const [data, setData] = useState([]);

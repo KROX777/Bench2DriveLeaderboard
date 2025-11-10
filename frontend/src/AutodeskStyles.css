@@ -1,0 +1,879 @@
+/* Autodesk风格的CSS样式 */
+
+/* 重置和基础样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Artifakt Element', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f8f9fa;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+}
+
+/* 顶部导航栏 */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  padding: 0;
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.nav-logo-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.thinklab-logo {
+  height: 40px;
+  width: auto;
+}
+
+.nav-title h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-menu li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.nav-menu li a:hover,
+.nav-menu li a.active {
+  color: #0696d7;
+}
+
+.nav-menu li a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -22px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #0696d7;
+}
+
+/* 用户菜单 */
+.user-menu {
+  position: relative;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0696d7 0%, #3b82f6 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 250px;
+  z-index: 1000;
+  margin-top: 0.5rem;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.user-info {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #f8f9fa;
+}
+
+.user-avatar-dropdown {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0696d7 0%, #3b82f6 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.username {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.email {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0;
+}
+
+.user-dropdown .dropdown-item,
+.user-dropdown a.dropdown-item,
+.user-dropdown button.dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  padding: 12px 16px !important;
+  background: none !important;
+  border: none !important;
+  width: 100% !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  color: #333 !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  transition: background-color 0.2s ease !important;
+  box-sizing: border-box !important;
+  min-height: 40px !important;
+  font-family: inherit !important;
+}
+
+.user-dropdown .dropdown-item:hover,
+.user-dropdown a.dropdown-item:hover,
+.user-dropdown button.dropdown-item:hover {
+  background: #f0f7ff !important;
+  color: #333 !important;
+}
+
+.user-dropdown .dropdown-item.logout,
+.user-dropdown button.dropdown-item.logout {
+  color: #d32f2f !important;
+}
+
+.user-dropdown .dropdown-item.logout:hover,
+.user-dropdown button.dropdown-item.logout:hover {
+  background: #ffebee !important;
+  color: #d32f2f !important;
+}
+
+.dropdown-icon {
+  font-size: 14px !important;
+  width: 18px !important;
+  height: 18px !important;
+  text-align: center !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+.user-dropdown .dropdown-item span:last-child {
+  flex: 1 !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 主要内容区域 */
+.content {
+  flex: 1;
+  width: 100%;
+  margin-top: 70px;
+  padding: 0;
+}
+
+.page-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* 首屏横幅 (Hero Section) */
+.hero-section {
+  text-align: center;
+  padding: 5rem 2rem;
+  background: linear-gradient(135deg, #0a2540 0%, #064a76 100%);
+  color: white;
+  border-radius: 0;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+}
+
+.hero-section h1 {
+  font-size: 2.75rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.9;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.875rem 2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #0696d7;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #057aa0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 150, 215, 0.4);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #0696d7;
+  border: 2px solid #0696d7;
+}
+
+.btn-outline:hover {
+  background-color: #0696d7;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 150, 215, 0.4);
+}
+
+/* 特性区域 */
+.features-section {
+  margin-bottom: 5rem;
+  padding: 0 1rem;
+}
+
+.features-section h2 {
+  text-align: center;
+  font-size: 2.25rem;
+  margin-bottom: 3rem;
+  color: #0a2540;
+  font-weight: 700;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid #eef2f6;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 300px;
+}
+
+.feature-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-image {
+  filter: blur(4px) brightness(0.3);
+}
+
+.feature-card:hover .feature-overlay {
+  opacity: 1;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  border-color: #d1e7f7;
+}
+
+.feature-card:hover .feature-overlay {
+  opacity: 1;
+  backdrop-filter: blur(8px);
+  background: rgba(234, 234, 234, 0.8);
+}
+
+.feature-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: white;
+  text-align: center;
+}
+
+.feature-overlay h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: white;
+  font-weight: 600;
+}
+
+.feature-overlay p {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+/* 关于区域 */
+.about-section {
+  background: white;
+  padding: 4rem 3rem;
+  border-radius: 8px;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.about-section h2 {
+  font-size: 2.25rem;
+  margin-bottom: 2rem;
+  color: #0a2540;
+  font-weight: 700;
+  text-align: center;
+}
+
+.about-section p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 概览区域 */
+.overview-section {
+  background: white;
+  padding: 4rem 3rem;
+  border-radius: 8px;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.overview-section h2 {
+  font-size: 2.25rem;
+  margin-bottom: 2rem;
+  color: #0a2540;
+  font-weight: 700;
+}
+
+.overview-container {
+  max-width: 900px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.overview-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 视频区域 */
+.video-section {
+  background: white;
+  padding: 4rem 3rem;
+  border-radius: 8px;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.video-section h2 {
+  font-size: 2.25rem;
+  margin-bottom: 2rem;
+  color: #0a2540;
+  font-weight: 700;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 8px;
+}
+
+/* 行动号召区域 */
+.cta-section {
+  text-align: center;
+  padding: 5rem 2rem;
+  background: linear-gradient(135deg, #0696d7 0%, #3b82f6 100%);
+  color: white;
+  border-radius: 8px;
+  margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.cta-section p {
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* 底部 */
+.footer {
+  background-color: #0a2540;
+  color: #e0e0e0;
+  text-align: center;
+  padding: 3rem 2rem;
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-logo {
+  margin-bottom: 1.5rem;
+}
+
+.footer-logo img {
+  height: 30px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #b0bec5;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.footer-links a:hover {
+  color: #0696d7;
+}
+
+.footer p {
+  font-size: 0.9rem;
+  color: #90a4ae;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.social-links a {
+  color: #b0bec5;
+  font-size: 1.25rem;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #0696d7;
+}
+
+/* 响应式设计 */
+@media (max-width: 992px) {
+  .nav-container {
+    padding: 0 1.5rem;
+  }
+  
+  .hero-section h1 {
+    font-size: 2.25rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .features-grid {
+    gap: 2rem;
+  }
+  
+  .feature-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .about-section,
+  .overview-section,
+  .video-section {
+    padding: 3rem 2rem;
+  }
+  
+  .cta-section {
+    padding: 4rem 1.5rem;
+  }
+  
+  .cta-section h2 {
+    font-size: 2rem;
+  }
+  
+  .cta-section p {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: row;
+    height: 60px;
+    padding: 0 1rem;
+  }
+  
+  .nav-logo-section {
+    gap: 0.75rem;
+  }
+  
+  .thinklab-logo {
+    height: 32px;
+  }
+  
+  .nav-title h1 {
+    font-size: 1.1rem;
+  }
+  
+  .nav-menu {
+    gap: 1rem;
+  }
+  
+  .nav-menu li a {
+    font-size: 0.85rem;
+    padding: 0.25rem 0;
+  }
+  
+  .hero-section {
+    padding: 3rem 1.5rem;
+  }
+  
+  .hero-section h1 {
+    font-size: 1.75rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .hero-buttons {
+    gap: 1rem;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .features-section h2 {
+    font-size: 1.75rem;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .feature-card {
+    padding: 1.75rem 1.5rem;
+    min-height: 250px;
+  }
+  
+  .feature-overlay {
+    padding: 1.5rem;
+  }
+  
+  .feature-overlay h3 {
+    font-size: 1.25rem;
+  }
+  
+  .feature-overlay p {
+    font-size: 0.9rem;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.25rem;
+  }
+  
+  .about-section,
+  .overview-section,
+  .video-section {
+    padding: 2rem 1.5rem;
+  }
+  
+  .about-section h2,
+  .overview-section h2,
+  .video-section h2 {
+    font-size: 1.75rem;
+  }
+  
+  .cta-section {
+    padding: 3rem 1.5rem;
+  }
+  
+  .cta-section h2 {
+    font-size: 1.75rem;
+  }
+  
+  .cta-section p {
+    font-size: 1rem;
+  }
+  
+  .footer {
+    padding: 2rem 1.5rem;
+  }
+  
+  .footer-links {
+    gap: 1.25rem;
+  }
+  
+  .footer-links a {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .content {
+    margin-top: 60px;
+  }
+  
+  .page-content {
+    padding: 1.5rem 1rem;
+  }
+  
+  .nav-menu {
+    gap: 0.75rem;
+  }
+  
+  .hero-section {
+    padding: 2.5rem 1rem;
+  }
+  
+  .hero-section h1 {
+    font-size: 1.5rem;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .btn {
+    width: 100%;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .features-section {
+    margin-bottom: 3rem;
+  }
+  
+  .features-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .feature-card {
+    padding: 1.5rem;
+    min-height: 200px;
+  }
+  
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.15rem;
+  }
+  
+  .about-section,
+  .overview-section,
+  .video-section {
+    padding: 1.75rem 1.25rem;
+  }
+  
+  .about-section h2,
+  .overview-section h2,
+  .video-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .cta-section {
+    padding: 2.5rem 1rem;
+  }
+  
+  .cta-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .footer-links {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .social-links {
+    gap: 1rem;
+  }
+}

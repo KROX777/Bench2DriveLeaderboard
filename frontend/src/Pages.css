@@ -1,19 +1,47 @@
 /* Pages styling */
 
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  overflow-x: hidden; /* 防止因 100vw/溢出产生水平滚动和右侧白带 */
+}
+
 .page-content {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100vw;               /* 改为 100vw 确保全宽 */
+  box-sizing: border-box;     /* 让 padding 不会增加可视宽度 */
+  padding: 0 2rem 2rem 2rem;
+  background: #fffdef;
+  min-height: 100vh;
 }
 
 /* Home Page */
 .hero-section {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  min-height: 100vh;
+  background: #000000;
   color: white;
-  border-radius: 12px;
-  margin-bottom: 3rem;
+  margin-top: 0;
+  position: relative;
+}
+
+.hero-section .text-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 2;
+}
+
+.hero-section .image-content {
+  flex: 1;
+  background-image: url('./pictures/autodrive_home.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .logo-container {
@@ -59,42 +87,14 @@
   border: none;
   cursor: pointer;
   display: inline-block;
+  background: #000000;
+  color: #ffffff;
 }
 
-.btn-primary {
-  background-color: #61dafb;
-  color: #1a2332;
-}
-
-.btn-primary:hover {
-  background-color: #4fc3dc;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(97, 218, 251, 0.4);
-}
-
-.btn-secondary {
-  background-color: white;
-  color: #667eea;
-  border: 2px solid white;
-}
-
-.btn-secondary:hover {
-  background-color: transparent;
-  color: white;
-  transform: translateY(-2px);
-}
-
-.btn-outline {
-  background-color: transparent;
-  color: #61dafb;
-  border: 2px solid #61dafb;
-}
-
-.btn-outline:hover {
-  background-color: #61dafb;
-  color: #1a2332;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(97, 218, 251, 0.4);
+.btn:hover {
+  background: #333333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: #ffffff;
 }
 
 .features-section {
@@ -234,7 +234,7 @@
 .cta-section {
   text-align: center;
   padding: 3rem;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #87CEEB 0%, #0047AB 100%);
   color: white;
   border-radius: 12px;
 }
@@ -991,7 +991,7 @@
 }
 
 .modal-close:hover {
-  background: #f0f0f0;
+  background: #860d0d;
   color: #333;
 }
 
@@ -1002,7 +1002,7 @@
 .form-section {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #a40e0e;
 }
 
 .form-section h3 {

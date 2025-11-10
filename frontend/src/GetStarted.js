@@ -1,6 +1,6 @@
-// Get Started page component
-import React from 'react';
-import './Pages.css';
+// Get Started page component
+import React from 'react';
+import './AutodeskStyles.css';
 
 function GetStarted() {
   return (
